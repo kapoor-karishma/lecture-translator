@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture Translator</title>
+</head>
+
+<body>
+
+    <h1>🎓 Lecture Translator</h1>
+
+    <p>
+        Verstehe deine Vorlesung - einfach und in Echtzeit.
+    </p>
+
+    <button id="startButton">🎤 Aufnahme starten </button>
+    <p id="result">Dein erkannter Text erscheint hier.</p>
+    <script>
+        const button =
+    document.getElementById("startButton");
+        button.addEventListener("click", async function () {
+     try {
+        const stream = await
+    navigator.mediaDevices.getUserMedia({audio: true } );
+            alert("Mikrofon erfolgreich aktiviert!");
+            stream.getTracks().forEach(track => track.stop() );
+     } catch (error) {
+         alert("Mikrofonzugriff nicht möglich. Bitte prüfe die Berechtigung.");
+     }
+    } );
+    const SpeechRecognition = 
+       window.SpeechRecognition ||
+       window.webkitSpeechRecognition;
+       const recognition = SpeechRecognition
+           ? new SpeechRecognition ()
+           : null;
+        if (recognition) {
+            recognition.lang = "de-DE";
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        }
+        if (recognition) {
+            recognition.onresult = function(event)
+        {
+                const text = event.results[0]
+        [0].transcript;
+
+        document.getElementById("result").textContent = text;
+                };
+        }
+    if (SpeechRecognition) {
+        console.log("Spracherkennung ist verfügbar!");
+    } else {
+        console.log("Spracherkennung wird nicht unterstützt.");
+    }
+    </script>
+
+</body>
+</html>
